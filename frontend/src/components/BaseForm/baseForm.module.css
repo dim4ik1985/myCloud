@@ -1,0 +1,34 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fff;
+  padding: 20px;
+  min-height: 500px;
+  width: 350px;
+  border-radius: 3px;
+  box-shadow: #0f0f0f 2px 5px 10px;
+}
+
+.itemBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.itemBox:first-child {
+  font-size: 30px;
+  text-transform: uppercase;
+  margin: 0 0 40px 0;
+}
+
+.itemBox:last-child {
+  font-size: 15px;
+  margin: 20px 0;
+}
+
+.itemBox:last-child:hover {
+  cursor: pointer;
+  color: #b02b24;
+}
