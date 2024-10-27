@@ -33,6 +33,15 @@
 
 ## Backend
 
+### Dependencies
+
+- [Django](https://www.djangoproject.com/)
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [django-cors-headers](https://pypi.org/project/django-cors-headers/)
+- [psycopg2](https://www.psycopg.org/)
+- [djangorestframework-simplejwt](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+
+
 ### Installation
 
 Create virtual environment
