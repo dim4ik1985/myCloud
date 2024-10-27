@@ -1,0 +1,27 @@
+.wrapper {
+  /*background-color: #1e1f22;*/
+  /*background-image: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);*/
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  margin: 100px 0 20px 0;
+  font-size: 30px;
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+.title span {
+  color: #80a7d7;
+}

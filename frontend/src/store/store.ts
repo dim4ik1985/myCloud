@@ -4,12 +4,14 @@ import userReducer from "./slices/userLoginSlice.ts";
 import formReducer from "./slices/formSlice";
 import userProfileSlice from "./slices/profileSlice.ts";
 import adminPanelSlice from "./slices/AdminSlice.ts";
+import filesReducer from "./slices/filesSlice.ts";
 
 export const rootReducer = combineReducers({
   login: userReducer,
   form: formReducer,
   profile: userProfileSlice,
-  admin: adminPanelSlice
+  admin: adminPanelSlice,
+  files: filesReducer
 });
 
 export const store = configureStore({

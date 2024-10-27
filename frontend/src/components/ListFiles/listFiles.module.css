@@ -1,0 +1,11 @@
+.no-files {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-container {
+  overflow-x: auto;
+  position: relative;
+}
