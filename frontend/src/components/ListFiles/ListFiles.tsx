@@ -51,7 +51,6 @@ export const ListFiles = (props: IListFilesProps) => {
 
   const handlerChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentName(event.target.value);
-    console.log(currentName);
     if (event.target.value !== "") {
       setDisabled(false);
     }

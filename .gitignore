@@ -165,6 +165,8 @@ cython_debug/
 .DS_Store
 .AppleDouble
 .LSOverride
+backend/media
+backend/static
 
 # Icon must end with two \r
 Icon

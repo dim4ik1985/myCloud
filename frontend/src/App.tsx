@@ -4,6 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import { PrivateRoute } from "./utils/PrivateRoute.tsx";
+import { ProfileScreen } from "./pages/ProfileScreen";
+import { Admin } from "./pages/Admin";
 
 function App() {
   return (
@@ -13,6 +16,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+
           <Route path="*" element={<div>404... Page not found</div>} />
         </Routes>
       </main>
