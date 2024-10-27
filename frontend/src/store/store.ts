@@ -3,11 +3,13 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userLoginSlice.ts";
 import formReducer from "./slices/formSlice";
 import userProfileSlice from "./slices/profileSlice.ts";
+import adminPanelSlice from "./slices/AdminSlice.ts";
 
 export const rootReducer = combineReducers({
   login: userReducer,
   form: formReducer,
-  profile: userProfileSlice
+  profile: userProfileSlice,
+  admin: adminPanelSlice
 });
 
 export const store = configureStore({
