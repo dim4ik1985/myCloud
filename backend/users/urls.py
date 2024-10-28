@@ -15,6 +15,8 @@ urlpatterns = [
     path('admin/users/', AdminPanelAPIView.as_view(), name="users-info"),
     path('admin/users/<int:pk>/', AdminPanelAPIView.as_view(), name="user-role-change"),
     path('admin/users/<int:pk>/', AdminPanelAPIView.as_view(), name="user-delete"),
+    path('admin/users/<int:pk>/files/', UserFileAPIView.as_view(), name="users-files"),
+    path('admin/users/<int:pk>/files/', UserFileAPIView.as_view(), name="users-files-delete"),
 ]
 
 

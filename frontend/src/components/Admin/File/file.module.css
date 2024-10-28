@@ -1,0 +1,44 @@
+.file {
+  margin: 5px;
+  border: 1px solid #1975d0;
+  border-radius: 5px;
+}
+
+.wrapper {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file__info {
+}
+
+.file__name {
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.file__item {
+}
+
+.file__size {
+  border-radius: 5px;
+  padding: 5px;
+  width: 100px;
+  text-align: center;
+  margin: 0 0 10px;
+  background-color: #6f94c6;
+  color: #ffffff;
+}
+
+.file__date {
+  text-transform: uppercase;
+  border-radius: 5px;
+  padding: 5px;
+  width: 150px;
+  text-align: end;
+  margin: 0 0 10px;
+  background-color: #6f94c6;
+  color: #ffffff;
+}

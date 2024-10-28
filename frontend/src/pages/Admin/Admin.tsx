@@ -26,15 +26,15 @@ import { useEffect } from "react";
 
 import { IUser } from "../../models";
 
-import Tooltip from "@mui/material/Tooltip";
 import { CircularProgress } from "@mui/material";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+
 import {
   changeRoleUser,
   deleteUser,
   getUsers,
   usersAdminState
 } from "../../store/slices/AdminSlice.ts";
+import { User } from "../../components/Admin/User";
 
 export const Admin = () => {
   const navigate = useNavigate();
@@ -55,7 +55,6 @@ export const Admin = () => {
   };
 
   const handleDeleteUser = (userId: number) => {
-    console.log(userId);
     dispatch(deleteUser(userId));
   };
 
@@ -125,52 +124,12 @@ export const Admin = () => {
           .filter((user) => user.id !== profile.profile.id)
           .filter((user) => !user.is_superuser)
           .map((user) => (
-            <li className={"wrapper"} key={user.id}>
-              <div className={"header"}>
-                {user.login}
-                <Tooltip title={"Изменение признака администратора"} placement="top" arrow={true}>
-                  <span
-                    onClick={() => handlerRoleChange(user)}
-                    className={user.is_staff ? "admin on" : "admin"}
-                  >
-                    admin
-                  </span>
-                </Tooltip>
-                <Tooltip title={"Удалить пользователя"} placement="top" arrow={true}>
-                  <PersonRemoveIcon
-                    onClick={() => user.id && handleDeleteUser(user.id)}
-                    className={"remove"}
-                  />
-                </Tooltip>
-                {user?.files && (
-                  <div
-                    style={{
-                      marginLeft: "50px",
-                      borderRadius: "5px",
-                      padding: "10px",
-                      backgroundColor: "#dddddd"
-                    }}
-                  >
-                    <span>Файлов: </span>
-                    {user?.files.length}
-                  </div>
-                )}
-                <div
-                  style={{
-                    marginLeft: "50px",
-                    borderRadius: "5px",
-                    padding: "10px",
-                    backgroundColor: "#dddddd"
-                  }}
-                >
-                  <span>Занято места: </span>
-                  {user?.files
-                    ?.reduce((acc, file) => acc + file.size / 8 / 1024 / 1024, 0)
-                    .toFixed(2) ?? 0}
-                  <span style={{ marginLeft: "5px" }}>mb</span>
-                </div>
-              </div>
-            </li>
+            <User
+              key={user.id}
+              user={user}
+              handlerRoleChange={handlerRoleChange}
+              handleDeleteUser={handleDeleteUser}
+            />
           ))}
       </ul>
     </>

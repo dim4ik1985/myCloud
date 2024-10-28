@@ -23,7 +23,7 @@ import {
   refreshUserToken,
   userLoginState
 } from "../../store/slices/userLoginSlice.ts";
-import { ListFiles } from "../../components/ListFiles";
+import { ListFiles } from "../../components/Storage/ListFiles";
 import { CircularProgress } from "@mui/material";
 
 export const ProfileScreen = () => {

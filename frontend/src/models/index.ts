@@ -87,9 +87,9 @@ export interface IBaseFormProps {
 
 export interface IFile {
   id?: number;
-  file: File;
-  name: string;
-  size: number;
+  file?: File;
+  name?: string;
+  size?: number;
   created_at?: string;
   last_download_at?: string;
   commentary?: string;

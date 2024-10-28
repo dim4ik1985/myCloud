@@ -29,10 +29,10 @@ export const filesSlice = createSliceWithThunk({
       async (state: IFile, { rejectWithValue }) => {
         try {
           const formData = new FormData();
-          formData.append("file", state.file);
-          formData.append("name", state.name);
+          formData.append("file", state.file as File);
+          formData.append("name", state.name ?? "");
           formData.append("commentary", state.commentary ?? "");
-          formData.append("size", state.size);
+          formData.append("size", state.size?.toString() ?? "");
 
           const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/users/files/`, {
             method: "POST",
@@ -227,7 +227,7 @@ export const filesSlice = createSliceWithThunk({
         }
       }
     ),
-    downloadFiles: create.asyncThunk(
+    downloadFilesLink: create.asyncThunk(
       async (state: number, { rejectWithValue }) => {
         try {
           const response = await fetch(
@@ -281,7 +281,7 @@ export const {
   renameComment,
   getFiles,
   deleteFiles,
-  downloadFiles,
+  downloadFilesLink,
   errorFilesReset,
   modalActions
 } = filesSlice.actions;

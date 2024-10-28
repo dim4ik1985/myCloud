@@ -7,6 +7,7 @@ import { Register } from "./pages/Register";
 import { PrivateRoute } from "./utils/PrivateRoute.tsx";
 import { ProfileScreen } from "./pages/ProfileScreen";
 import { Admin } from "./pages/Admin";
+import { UserFiles } from "./components/Admin/UserFiles/UserFiles.tsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/:id" element={<UserFiles />} />
           </Route>
 
           <Route path="*" element={<div>404... Page not found</div>} />

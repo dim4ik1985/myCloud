@@ -1,9 +1,10 @@
 import os
-from importlib.metadata import files
+import shutil
 
+from django.conf.global_settings import MEDIA_ROOT
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, RetrieveAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
@@ -11,8 +12,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import *
-from .models import File
-
+from .models import File, user_directory_path
 
 
 class UserRegistrationAPIView(GenericAPIView):
@@ -73,6 +73,7 @@ class UserInfoAPIView(RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+# Admin view
 class AdminPanelAPIView(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     serializer_class = CustomUserSerializer
@@ -93,6 +94,7 @@ class AdminPanelAPIView(APIView):
                     {
                         "id": file.id,
                         "name": file.name,
+                        "file_path": file.file.path,
                         "size": file.size
                 } for file in files]
             }
@@ -113,12 +115,33 @@ class AdminPanelAPIView(APIView):
 
     def delete(self, request, pk):
         user = CustomUser.objects.get(id=pk)
-        os.remove('media/' + f'user_{user.id}')
+        # Remove user files
+        for file in File.objects.filter(user=user):
+            os.remove(file.file.path)
+            file.delete()
+        # Delete user
         user.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserFileAPIView(APIView):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    serializer_class = FileSerializer
+
+    def get(self, request, pk):
+        user = CustomUser.objects.get(id=pk)
+        files = File.objects.filter(user=user)
+        serializer = FileSerializer(files, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        file = File.objects.get(id=pk)
+        file.delete()
+        os.remove(file.file.path)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
+# Users File view
 class FileUploadView(APIView):
     permission_classes = [IsAuthenticated]
     serializers_class = FileSerializer
@@ -131,10 +154,12 @@ class FileUploadView(APIView):
 
     def post(self, request):
         serializer = FileSerializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def patch(self, request, pk):
         file = File.objects.get(id=pk)
@@ -149,6 +174,7 @@ class FileUploadView(APIView):
     def delete(self, request, pk):
         file = File.objects.get(id=pk)
         if file.user == request.user:
+            print(file.file.path)
             file.delete()
             os.remove(file.file.path)
             return Response(status=status.HTTP_204_NO_CONTENT)
