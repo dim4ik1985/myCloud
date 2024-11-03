@@ -4,7 +4,7 @@ from pathlib import Path
 from os import getenv, path
 
 from django.conf.global_settings import CSRF_COOKIE_SECURE, CSRF_TRUSTED_ORIGINS, SESSION_COOKIE_SECURE, \
-    CSRF_COOKIE_SAMESITE, MEDIA_ROOT, MEDIA_URL
+    CSRF_COOKIE_SAMESITE, MEDIA_ROOT, MEDIA_URL, LOGGING
 from django.core.management.utils import get_random_secret_key
 import dotenv
 
@@ -20,7 +20,7 @@ if path.isfile(dotenv_file):
 SECRET_KEY = getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG", "False") == "True"
+DEBUG = getenv("DEBUG", False) == "True"
 
 # ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 ALLOWED_HOSTS = ["*"]
@@ -53,6 +53,45 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'main_formatter': {
+            'format': '{asctime} - [{levelname}] - {module} - {filename} - {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_formatter',
+        },
+
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'information.log',
+            'formatter': 'main_formatter',
+        },
+    },
+
+    'loggers': {
+        'users': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
 
 ROOT_URLCONF = 'cloud.urls'
 

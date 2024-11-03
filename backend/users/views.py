@@ -1,12 +1,11 @@
 import os
-import shutil
 
-from django.conf.global_settings import MEDIA_ROOT
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+import logging
 
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -14,6 +13,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from .models import File, user_directory_path
 
+
+logger = logging.getLogger(__name__)
+
+#############
+# API Views
+#############
 
 class UserRegistrationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
@@ -29,6 +34,8 @@ class UserRegistrationAPIView(GenericAPIView):
             "refresh": str(token),
             "access": str(token.access_token)
         }
+
+        logger.info('user registration success')
 
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -46,6 +53,8 @@ class UserLoginAPIView(GenericAPIView):
         token = RefreshToken.for_user(user)
         # data = serializer.data
 
+        logger.warning('user login success')
+
         return Response({
             "refresh": str(token),
             "access": str(token.access_token)
@@ -61,8 +70,10 @@ class UserLogoutAPIView(GenericAPIView):
             refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
+            logger.warning('user logout success')
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
+            logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -71,9 +82,10 @@ class UserInfoAPIView(RetrieveAPIView):
     serializer_class = CustomUserSerializer
 
     def get_object(self):
+        logger.info(self.request.user)
         return self.request.user
 
-# Admin view
+
 class AdminPanelAPIView(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     serializer_class = CustomUserSerializer
@@ -99,6 +111,7 @@ class AdminPanelAPIView(APIView):
                 } for file in files]
             }
             data.append(user_data)
+            logger.info('get users info success')
 
         return Response(data)
 
@@ -109,8 +122,10 @@ class AdminPanelAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save(user=request.user)
+            logger.info('admin status change success')
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
+            logger.error('admin status change error')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request, pk):
@@ -121,7 +136,7 @@ class AdminPanelAPIView(APIView):
             file.delete()
         # Delete user
         user.delete()
-
+        logger.warning('admin delete user success')
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserFileAPIView(APIView):
@@ -132,16 +147,22 @@ class UserFileAPIView(APIView):
         user = CustomUser.objects.get(id=pk)
         files = File.objects.filter(user=user)
         serializer = FileSerializer(files, many=True)
+
+        logger.info('get user files success')
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         file = File.objects.get(id=pk)
         file.delete()
         os.remove(file.file.path)
+        logger.warning('user delete file success')
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+#################
 # Users File view
+#################
 class FileUploadView(APIView):
     permission_classes = [IsAuthenticated]
     serializers_class = FileSerializer
@@ -149,6 +170,9 @@ class FileUploadView(APIView):
     def get(self, request):
         files = File.objects.filter(user=request.user)
         serializer = FileSerializer(files, many=True)
+
+        logger.info('get user files success')
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -157,8 +181,10 @@ class FileUploadView(APIView):
 
         if serializer.is_valid():
             serializer.save(user=request.user)
+            logger.info('file upload success')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
+            logger.error('file upload error')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def patch(self, request, pk):
@@ -167,8 +193,10 @@ class FileUploadView(APIView):
 
         if serializer.is_valid():
             serializer.save(user=request.user)
+            logger.info('file update success')
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
+            logger.error('file update error')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request, pk):
@@ -177,8 +205,10 @@ class FileUploadView(APIView):
             print(file.file.path)
             file.delete()
             os.remove(file.file.path)
+            logger.warning('user delete file success')
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
+            logger.error('user delete file error')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -191,6 +221,8 @@ class FileDownloadLinkView(APIView):
         file.save()
 
         serializer = FileSerializer(file)
+
+        logger.info('get file download link success')
 
         return Response(serializer.data.get('file_link'), status=status.HTTP_200_OK)
 

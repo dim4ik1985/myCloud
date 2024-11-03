@@ -45,6 +45,8 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.login
 
+
+
 class File(models.Model):
     file = models.FileField(upload_to=user_directory_path)
     name = models.CharField(max_length=500, null=True, blank=True)
