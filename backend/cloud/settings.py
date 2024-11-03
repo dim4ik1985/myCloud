@@ -3,7 +3,6 @@ from datetime import timedelta
 from pathlib import Path
 from os import getenv, path
 
-
 from django.conf import settings
 from django.core.management.utils import get_random_secret_key
 import dotenv
@@ -73,7 +72,7 @@ LOGGING = {
 
         'file': {
             'class': 'logging.FileHandler',
-            'filename': f'{settings.BASE_DIR}/information.log',
+            'filename': 'information.log',
             'formatter': 'main_formatter',
         },
     },
