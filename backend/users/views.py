@@ -2,7 +2,7 @@ import os
 
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 import logging
@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import *
-from .models import File, user_directory_path
+from .models import File
 
 
 logger = logging.getLogger(__name__)
@@ -49,9 +49,7 @@ class UserLoginAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        # serializer = CustomUserSerializer(user)
         token = RefreshToken.for_user(user)
-        # data = serializer.data
 
         logger.warning('user login success')
 
@@ -122,7 +120,7 @@ class AdminPanelAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save(user=request.user)
-            logger.info('admin status change success')
+
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
             logger.error('admin status change error')
