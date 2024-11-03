@@ -8,6 +8,7 @@ import { PrivateRoute } from "./utils/PrivateRoute.tsx";
 import { ProfileScreen } from "./pages/ProfileScreen";
 import { Admin } from "./pages/Admin";
 import { UserFiles } from "./components/Admin/UserFiles/UserFiles.tsx";
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             <Route path="/admin/:id" element={<UserFiles />} />
           </Route>
 
-          <Route path="*" element={<div>404... Page not found</div>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </>
