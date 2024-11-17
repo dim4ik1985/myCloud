@@ -1,9 +1,14 @@
 import "./modalRename.css";
-import { TextField } from "@mui/material";
+
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { fileState, modalActions } from "../../../store/slices/filesSlice.ts";
+
+import { TextField } from "@mui/material";
 import { ModalButton } from "../../ModalButton";
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+
+import Button from "@mui/material/Button";
 
 interface IModalRenameProps {
   modalCategory: string;
@@ -17,50 +22,91 @@ export const ModalRename = (props: IModalRenameProps) => {
   const { modalCategory, url_link, disabled, onChangeName, onSubmit } = props;
   const dispatch = useAppDispatch();
   const { modalRename } = useAppSelector(fileState);
+  const [open, setOpen] = React.useState(false);
+
+  const handlerCopyLink = () => {
+    navigator.clipboard
+      .writeText(url_link!)
+      .then(() => {
+        setOpen(true);
+        dispatch(modalActions(false));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleClose = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
-    <div className={modalRename ? "modal" : "active"} onClick={() => dispatch(modalActions(false))}>
+    <>
       <div
-        className={"modal__content"}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
+        className={modalRename ? "modal" : "active"}
+        onClick={() => dispatch(modalActions(false))}
       >
-        {modalCategory === "UploadUrl" ? (
-          <div>
-            <p>Ссылка для скачивания</p>
-            <TextField
-              id="outlined-basic"
-              multiline
-              rows={4}
-              defaultValue={url_link}
-              variant="outlined"
-              slotProps={{
-                input: {
-                  readOnly: true
-                }
-              }}
-              sx={{ marginBottom: "20px", borderRadius: "25px" }}
-              onChange={onChangeName}
-            />
-          </div>
-        ) : (
-          <form
-            className={modalRename ? "form__rename" : "close"}
-            method="patch"
-            onSubmit={onSubmit}
-          >
-            <TextField
-              id="outlined-basic"
-              label={modalCategory === "renameFile" ? "Новое имя" : "Новый комментарий"}
-              variant="outlined"
-              sx={{ marginBottom: "20px", borderRadius: "25px" }}
-              onChange={onChangeName}
-            />
-            <ModalButton type={"submit"} disabled={disabled} label={"Переименовать"} />
-          </form>
-        )}
+        <div
+          className={"modal__content"}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          {modalCategory === "UploadUrl" ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <p>Ссылка для скачивания</p>
+              <TextField
+                id="outlined-basic"
+                multiline
+                rows={2}
+                defaultValue={url_link}
+                variant="outlined"
+                slotProps={{
+                  input: {
+                    readOnly: true
+                  }
+                }}
+                sx={{ width: "500px", marginBottom: "20px", borderRadius: "25px" }}
+              />
+              <Button
+                variant="contained"
+                type={"button"}
+                sx={{ margin: "5px 0 20px 0", borderRadius: "25px" }}
+                onClick={handlerCopyLink}
+              >
+                Скопировать ссылку
+              </Button>
+            </div>
+          ) : (
+            <form
+              className={modalRename ? "form__rename" : "close"}
+              method="patch"
+              onSubmit={onSubmit}
+            >
+              <TextField
+                id="outlined-basic"
+                label={modalCategory === "renameFile" ? "Новое имя" : "Новый комментарий"}
+                variant="outlined"
+                sx={{ marginBottom: "20px", borderRadius: "25px" }}
+                onChange={onChangeName}
+              />
+              <ModalButton type={"submit"} disabled={disabled} label={"Переименовать"} />
+            </form>
+          )}
+        </div>
       </div>
-    </div>
+      <div>
+        <Snackbar
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          message="Ссылка скопирована"
+        />
+      </div>
+    </>
   );
 };

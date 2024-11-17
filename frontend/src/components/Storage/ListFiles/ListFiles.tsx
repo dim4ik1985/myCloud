@@ -46,7 +46,7 @@ export const ListFiles = (props: IListFilesProps) => {
   const [currentFile, setCurrentFile] = useState<number | null>(null);
   const [oldName, setOldName] = useState("");
   const [disabled, setDisabled] = useState(true);
-  const [url_link, setUrl_link] = useState("");
+  // const [url_link, setUrl_link] = useState("");
 
   const handlerChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentName(event.target.value);
@@ -95,13 +95,11 @@ export const ListFiles = (props: IListFilesProps) => {
 
   const handlerDeleteFile = (id: number) => {
     dispatch(deleteFiles(id));
-    console.log(id);
   };
 
   const handlerOpenFileLink = (file_id: number) => {
     setModalCategory("UploadUrl");
     handleDownload(file_id);
-    dispatch(modalActions(true));
   };
 
   const handleDownload = (id: number) => {
@@ -123,9 +121,7 @@ export const ListFiles = (props: IListFilesProps) => {
   useEffect(() => {
     if (downloadLink) {
       console.log(downloadLink);
-      setUrl_link(downloadLink);
-      // window.open(downloadLink, "_blank");
-      dispatch(getFiles());
+      dispatch(modalActions(true));
     }
   }, [dispatch, downloadLink]);
 
@@ -249,7 +245,7 @@ export const ListFiles = (props: IListFilesProps) => {
           </TableContainer>
 
           <ModalRename
-            url_link={url_link}
+            url_link={downloadLink}
             modalCategory={modalCategory}
             disabled={disabled}
             onChangeName={handlerChangeName}

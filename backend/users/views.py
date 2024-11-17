@@ -1,5 +1,6 @@
 import os
 
+from django.http import FileResponse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
@@ -11,8 +12,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import *
-from .models import File
-
+from .models import File, generate_file_link
 
 logger = logging.getLogger(__name__)
 
@@ -211,11 +211,11 @@ class FileUploadView(APIView):
 
 
 class FileDownloadLinkView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         file = File.objects.get(id=pk)
-        file.last_download_at = timezone.now()
+        file.file_link = generate_file_link(file.file.name, file.user.id)
         file.save()
 
         serializer = FileSerializer(file)
@@ -223,6 +223,18 @@ class FileDownloadLinkView(APIView):
         logger.info('get file download link success')
 
         return Response(serializer.data.get('file_link'), status=status.HTTP_200_OK)
+
+class FileDownloadView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        file = File.objects.get(file_link=pk)
+        file.last_download_at = timezone.now()
+        file.save()
+
+        logger.info('get file download success')
+
+        return FileResponse(open(file.file.path, 'rb'), content_type='application/octet-stream')
 
 
 

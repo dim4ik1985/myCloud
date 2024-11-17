@@ -231,7 +231,7 @@ export const filesSlice = createSliceWithThunk({
       async (state: number, { rejectWithValue }) => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_BASE_URL}/api/users/files/${state}/download/`,
+            `${import.meta.env.VITE_BASE_URL}/api/users/files/${state}/link/`,
             {
               method: "GET",
               headers: {
@@ -255,7 +255,7 @@ export const filesSlice = createSliceWithThunk({
         },
         fulfilled: (state, action) => {
           state.isLoadingFiles = false;
-          state.downloadLink = action.payload;
+          state.downloadLink = `${import.meta.env.VITE_BASE_URL}/api/users/files/download/${action.payload}/`;
           state.errorStatusFiles = "";
         },
         rejected: (state, action) => {

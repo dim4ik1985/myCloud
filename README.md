@@ -1,9 +1,5 @@
 # myCloud
 
-[![Build Status](https://github.com/dim4ik1985/myCloud/actions/workflows/build.yml/badge.svg)](https://github.com/dim4ik1985/myCloud/actions/workflows/build.yml)
-
-[![NPM version](https://img.shields.io/npm/v/mycloud.svg)](https://github.com/dim4ik1985/myCloud)
-
 ## Getting Started
 
 ### Description
@@ -56,20 +52,34 @@
     `ssh user_name@server_ip`
 9. Устанавливаем пакеты  
     `sudo apt update && sudo apt upgrade`
-10. Устанавливаем пакеты  
-    `sudo apt install python3-venv python3-pip postgresql nginx`
-11. Проверка работоспособности postgresql  
-    `sudo systemctl status postgresql`
-12. Проверка работоспособности nginx  
-    `sudo systemctl status nginx`
-13. Клонируем репозиторий   
-    `git clone https://github.com/dim4ik1985/myCloud/tree/dev`
-14. Создаем виртуальное окружение  
-    `python3 -m venv .venv`
-15. Активируем виртуальное окружение  
-    `source .venv/bin/activate`
-16. Устанавливаем зависимости  
-    `pip install -r requirements.txt`
+
+### REACT SETUP
+
+1. Устанавливаем пакеты  
+    `sudo apt install nodejs npm`
+2. Переходи в папку frontend  
+    `cd frontend`
+3. Устанавливаем зависимости  
+    `npm install`
+4. Запускаем команду для сборки проекта  
+    `npm run build`
+
+### DJANGO SETUP
+
+1. Устанавливаем пакеты  
+   `sudo apt install python3-venv python3-pip postgresql nginx`
+2. Проверка работоспособности postgresql  
+   `sudo systemctl status postgresql`
+3. Проверка работоспособности nginx  
+   `sudo systemctl status nginx`
+4. Клонируем репозиторий   
+   `git clone github.com/dim4ik1985/myCloud.git`
+5. Создаем виртуальное окружение  
+   `python3 -m venv .venv`
+6. Активируем виртуальное окружение  
+   `source .venv/bin/activate`
+7. Устанавливаем зависимости  
+   `pip install -r requirements.txt`
 
 ### Настройка базы данных
 
@@ -77,19 +87,11 @@
     ```postresql
    sudo su postgres
    psql
-   CREATE USER user_name WITH SUPERUSER;
-   ALTER USER user_name WITH PASSWORD 'password';
-   CREATE DATABASE user_name;
+   ALTER USER postgres WITH PASSWORD 'password';
+   CREATE DATABASE db_name;
    \q
    exit
     ```
-
-2. Подключаемся к базе данных
-   ```postresql
-   psql
-   CREATE DATABASE db_name;
-   \q
-   ```
 
  ### Настройка переменных окружения
 
@@ -98,7 +100,7 @@
      ```dotenv
     DJANGO_SECRET_KEY='some secret key'
     DEBUG='False'
-    DJANGO_ALLOWED_HOSTS=''
+    ALLOWED_HOSTS=''
     DB_NAME='name_of_database'
     DB_USER='username'
     DB_PASSWORD='password'

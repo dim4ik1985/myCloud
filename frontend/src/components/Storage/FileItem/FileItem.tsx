@@ -71,7 +71,7 @@ export const FadeMenu = (props: IFileItemProps) => {
           {
             <Tooltip title={"Открыть файл"} placement={"left"}>
               <Link
-                href={`http://localhost:8000${file.file}`}
+                href={`${import.meta.env.VITE_BASE_URL}${file.file}`}
                 underline="hover"
                 target="_blank"
                 download={file.name}
