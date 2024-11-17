@@ -82,9 +82,12 @@
    `nvm install 22`
 4. Переходи в папку frontend  
    `cd frontend`
-5. Устанавливаем зависимости  
+   Создаем файл .env
+5. Заполняем .env
+    `VITE_API_URL=http://ip_address_server/`
+6. Устанавливаем зависимости  
    `npm install`
-6. Запускаем команду для сборки проекта  
+7. Запускаем команду для сборки проекта  
    `npm run build`
 
 
@@ -93,10 +96,10 @@
 
 1. Создаем пользователя  
     ```postresql
-   sudo su postgres
-   psql
-   ALTER USER postgres WITH PASSWORD 'password';
-   CREATE DATABASE db_name;
+   sudo -u postgres psql
+   CREATE ROLE username WITH LOGIN PASSWORD 'password' CREATEDB;
+   CREATE DATABASE db_name OWNER username;
+   GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
    \q
    exit
     ```
