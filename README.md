@@ -53,16 +53,6 @@
 9. Устанавливаем пакеты  
     `sudo apt update && sudo apt upgrade`
 
-### REACT SETUP
-
-1. Устанавливаем пакеты  
-    `sudo apt install nodejs npm`
-2. Переходи в папку frontend  
-    `cd frontend`
-3. Устанавливаем зависимости  
-    `npm install`
-4. Запускаем команду для сборки проекта  
-    `npm run build`
 
 ### DJANGO SETUP
 
@@ -80,6 +70,24 @@
    `source .venv/bin/activate`
 7. Устанавливаем зависимости  
    `pip install -r requirements.txt`
+
+
+### REACT SETUP
+
+1. Install nvm
+   `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash`
+2. Копируем `export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm` и вставляем в терминал
+3. Устанавливаем пакеты  
+   `nvm install 22`
+4. Переходи в папку frontend  
+   `cd frontend`
+5. Устанавливаем зависимости  
+   `npm install`
+6. Запускаем команду для сборки проекта  
+   `npm run build`
+
+
 
 ### Настройка базы данных
 
