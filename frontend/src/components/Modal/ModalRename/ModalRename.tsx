@@ -24,16 +24,14 @@ export const ModalRename = (props: IModalRenameProps) => {
   const { modalRename } = useAppSelector(fileState);
   const [open, setOpen] = React.useState(false);
 
-  const handlerCopyLink = () => {
-    navigator.clipboard
-      .writeText(url_link!)
-      .then(() => {
-        setOpen(true);
-        dispatch(modalActions(false));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handlerCopyLink = async (url_link: string) => {
+    try {
+      await navigator.clipboard.writeText(url_link);
+      setOpen(true);
+      dispatch(modalActions(false));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleClose = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
@@ -76,7 +74,7 @@ export const ModalRename = (props: IModalRenameProps) => {
                 variant="contained"
                 type={"button"}
                 sx={{ margin: "5px 0 20px 0", borderRadius: "25px" }}
-                onClick={handlerCopyLink}
+                onClick={() => handlerCopyLink(url_link!)}
               >
                 Скопировать ссылку
               </Button>

@@ -167,10 +167,17 @@
     server {
         listen 80;
         server_name server_ip;
+         root /home/dmi85/myCloud/frontend/dist;
+         index index.html index.htm;
+
+        location / {
+        try_files $uri $uri/ /index.html;
+        }
+   
         location /static/ {
             root /home/user_name/project_name;
         }
-        location / {
+        location /api/ {
             include proxy_params;
             proxy_pass http://unix:/home/user_name/project_name/path/to/project.sock;
         }
@@ -184,7 +191,9 @@
     `sudo systemctl status nginx`
 6. Разрешаем доступ к nginx 
     `sudo ufw allow 'Nginx Full'`
-   
+7. Включаем логирование
+    `sudo tail -f /home/dmi85/myCloud/backend/information.log`
+
     
 
     
