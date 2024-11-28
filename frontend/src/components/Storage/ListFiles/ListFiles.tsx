@@ -120,7 +120,6 @@ export const ListFiles = (props: IListFilesProps) => {
 
   useEffect(() => {
     if (downloadLink) {
-      console.log(downloadLink);
       dispatch(modalActions(true));
     }
   }, [dispatch, downloadLink]);
@@ -168,7 +167,8 @@ export const ListFiles = (props: IListFilesProps) => {
                         sx={{
                           backgroundColor: "rgba(0, 0, 0, 0.08)",
                           boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 6px",
-                          maxWidth: "200px"
+                          maxWidth: "200px",
+                          overflow: "hidden"
                         }}
                         component="th"
                         scope="row"
@@ -216,7 +216,7 @@ export const ListFiles = (props: IListFilesProps) => {
                         align="center"
                       >{`${(+file!.size! / 1024 / 1024).toFixed(2)} Mb`}</TableCell>
                       <TableCell sx={{ width: "150px" }} align="right">
-                        {moment(file.created_at).format("DD.MM.YYYY, hh:mm")}
+                        {moment(file.created_at).format("DD.MM.YYYY, hh:mm a")}
                       </TableCell>
                       <TableCell
                         sx={{
@@ -227,7 +227,7 @@ export const ListFiles = (props: IListFilesProps) => {
                         align="right"
                       >
                         {file.last_download_at
-                          ? moment(file.last_download_at).startOf("hour").fromNow()
+                          ? moment(file.last_download_at).endOf("minutes").fromNow()
                           : "-"}
                       </TableCell>
                       <TableCell sx={{ width: "200px" }} align="center">

@@ -48,6 +48,7 @@ export const adminPanelSlice = createSliceWithThunk({
         fulfilled: (state, action) => {
           state.users = action.payload;
           state.changeRoleCheck = false;
+          state.deleteUserCheck = false;
         },
         rejected: (state, action) => {
           state.errorStatusAdmin = action.payload as string;

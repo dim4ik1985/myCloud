@@ -42,7 +42,8 @@ export const Admin = () => {
 
   const { isAuthenticated, errorTokenStatus } = useAppSelector(userLoginState);
   const profile = useAppSelector(profileState);
-  const { users, changeRoleCheck, isLoadingAdmin } = useAppSelector(usersAdminState);
+  const { users, changeRoleCheck, deleteUserCheck, isLoadingAdmin } =
+    useAppSelector(usersAdminState);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -83,6 +84,12 @@ export const Admin = () => {
       dispatch(getUsers());
     }
   }, [changeRoleCheck, dispatch]);
+
+  useEffect(() => {
+    if (deleteUserCheck) {
+      dispatch(getUsers());
+    }
+  }, [deleteUserCheck, dispatch]);
 
   return (
     <>

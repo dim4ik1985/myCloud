@@ -84,7 +84,7 @@
    `cd frontend`
    Создаем файл .env
 5. Заполняем .env
-    `VITE_API_URL=http://ip_address_server/`
+    `VITE_API_URL=http://ip_address_server`
 6. Устанавливаем зависимости  
    `npm install`
 7. Запускаем команду для сборки проекта  
@@ -165,22 +165,28 @@
     `sudo nano /etc/nginx/sites-available/project_name`
     ```cloud
     server {
-        listen 80;
-        server_name server_ip;
-         root /home/dmi85/myCloud/frontend/dist;
-         index index.html index.htm;
+      listen 80;
+      server_name server_ip;
+      root /home/dmi85/myCloud/frontend/dist;
+      index index.html index.htm;
 
-        location / {
+      location / {
         try_files $uri $uri/ /index.html;
-        }
+      }
+
+      location /static/ {
+        root /home/user_name/project_name;
+      }
    
-        location /static/ {
-            root /home/user_name/project_name;
-        }
-        location /api/ {
-            include proxy_params;
-            proxy_pass http://unix:/home/user_name/project_name/path/to/project.sock;
-        }
+      location /api/ {
+        include proxy_params;
+        proxy_pass http://unix:/home/user_name/project_name/path/to/project.sock;
+      }
+    
+      location /admin/ {
+        include proxy_params;
+        proxy_pass http://unix:/home/dmi85/myCloud/backend/cloud/gunicorn.sock;
+      }
     }
     ```
 4. Активируем nginx
