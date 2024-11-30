@@ -32,7 +32,7 @@ export const ProfileScreen = () => {
   const navigate = useNavigate();
 
   const { profile, isLogin, isUserLoading } = useAppSelector(profileState);
-  const { files, isLoadingFiles, uploadCheck } = useAppSelector(fileState);
+  const { files, isLoadingFiles, uploadCheck, errorStatusFiles } = useAppSelector(fileState);
   const { isAuthenticated, errorTokenStatus } = useAppSelector(userLoginState);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -168,6 +168,7 @@ export const ProfileScreen = () => {
                 onUpload={handleUpload}
                 isLoading={isLoadingFiles}
                 selectedFile={selectedFile}
+                errorStatus={errorStatusFiles}
                 inputRef={inputRef}
                 onChooseFile={onChooseFile}
                 onRemoveFile={removeFile}

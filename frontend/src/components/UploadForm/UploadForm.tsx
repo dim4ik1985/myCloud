@@ -4,6 +4,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { IUploadFormProps } from "../../models";
 import { CircularProgress, TextField } from "@mui/material";
 import { ModalButton } from "../ModalButton";
+import { ModalError } from "../Modal";
 
 export const UploadForm = (props: IUploadFormProps) => {
   const {
@@ -14,7 +15,8 @@ export const UploadForm = (props: IUploadFormProps) => {
     selectedFile,
     inputRef,
     onChooseFile,
-    onRemoveFile
+    onRemoveFile,
+    errorStatus
   } = props;
 
   return (
@@ -40,7 +42,9 @@ export const UploadForm = (props: IUploadFormProps) => {
             </button>
           </div>
         )}
+        {errorStatus !== "" && <ModalError title={errorStatus} message={"Большой объем файла"} />}
       </div>
+      {/* Upload form */}
       <form
         className={classes["form-upload"]}
         encType="multipart/form-data"

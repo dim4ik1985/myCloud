@@ -7,6 +7,7 @@ const initialState: IFilesData = {
   isLoadingFiles: false,
   errorStatusFiles: "",
   uploadCheck: false,
+  copyLinkCheck: false,
   renameCheck: false,
   deleteCheck: false,
   modalRename: false
@@ -178,8 +179,8 @@ export const filesSlice = createSliceWithThunk({
           state.isLoadingFiles = false;
           state.files = action.payload;
           state.uploadCheck = false;
-          state.deleteCheck = false;
-          state.renameCheck = false;
+          // state.deleteCheck = false;
+          // state.renameCheck = false;
         },
         rejected: (state, action) => {
           state.errorStatusFiles = action.payload as string;
@@ -271,19 +272,30 @@ export const filesSlice = createSliceWithThunk({
     }),
     modalActions: create.reducer((state, action: { payload: boolean }) => {
       state.modalRename = action.payload;
+    }),
+    copyLinkActions: create.reducer((state, action: { payload: boolean }) => {
+      state.copyLinkCheck = action.payload;
+    }),
+    statusReset: create.reducer((state) => {
+      state.renameCheck = false;
+      state.uploadCheck = false;
+      state.deleteCheck = false;
+      state.copyLinkCheck = false;
     })
   })
 });
 
 export const {
   uploadFiles,
+  copyLinkActions,
   renameFiles,
   renameComment,
   getFiles,
   deleteFiles,
   downloadFilesLink,
   errorFilesReset,
-  modalActions
+  modalActions,
+  statusReset
 } = filesSlice.actions;
 export const { fileState } = filesSlice.selectors;
 export default filesSlice.reducer;

@@ -64,11 +64,13 @@
    `sudo systemctl status nginx`
 4. Клонируем репозиторий   
    `git clone github.com/dim4ik1985/myCloud.git`
-5. Создаем виртуальное окружение  
+5. Переходим в папку  
+   `cd myCloud/backend/`
+6. Создаем виртуальное окружение  
    `python3 -m venv .venv`
-6. Активируем виртуальное окружение  
+7. Активируем виртуальное окружение  
    `source .venv/bin/activate`
-7. Устанавливаем зависимости  
+8. Устанавливаем зависимости  
    `pip install -r requirements.txt`
 
 
@@ -84,7 +86,7 @@
    `cd frontend`
    Создаем файл .env
 5. Заполняем .env
-    `VITE_API_URL=http://ip_address_server`
+    `VITE_BASE_URL=http://ip_address_server`
 6. Устанавливаем зависимости  
    `npm install`
 7. Запускаем команду для сборки проекта  
@@ -101,7 +103,6 @@
    CREATE DATABASE db_name OWNER username;
    GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
    \q
-   exit
     ```
 
  ### Настройка переменных окружения
@@ -111,11 +112,11 @@
      ```dotenv
     DJANGO_SECRET_KEY='some secret key'
     DEBUG='False'
-    ALLOWED_HOSTS=''
+    ALLOWED_HOSTS='127.0.0.1,localhost,your_server_ip'
     DB_NAME='name_of_database'
     DB_USER='username'
     DB_PASSWORD='password'
-    DB_HOST='host'
+    DB_HOST='localhost'
     DB_PORT='port'
      ```
 3. Применяем миграции  

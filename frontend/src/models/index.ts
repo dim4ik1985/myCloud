@@ -101,6 +101,7 @@ export interface IFilesData {
   isLoadingFiles: boolean;
   errorStatusFiles: string;
   uploadCheck: boolean;
+  copyLinkCheck: boolean;
   renameCheck: boolean;
   deleteCheck: boolean;
   modalRename?: boolean;
@@ -117,4 +118,5 @@ export interface IUploadFormProps {
   onRemoveFile: () => void;
 
   selectedFile: File | null;
+  errorStatus: string;
 }

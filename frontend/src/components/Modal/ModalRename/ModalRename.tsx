@@ -1,14 +1,14 @@
 import "./modalRename.css";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { fileState, modalActions } from "../../../store/slices/filesSlice.ts";
+import { copyLinkActions, fileState, modalActions } from "../../../store/slices/filesSlice.ts";
 
 import { TextField } from "@mui/material";
 import { ModalButton } from "../../ModalButton";
-import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 
 import Button from "@mui/material/Button";
+import { SnackBarModal } from "../../SnackBarModal";
 
 interface IModalRenameProps {
   modalCategory: string;
@@ -21,26 +21,28 @@ interface IModalRenameProps {
 export const ModalRename = (props: IModalRenameProps) => {
   const { modalCategory, url_link, disabled, onChangeName, onSubmit } = props;
   const dispatch = useAppDispatch();
-  const { modalRename } = useAppSelector(fileState);
-  const [open, setOpen] = React.useState(false);
+  const { modalRename, copyLinkCheck, renameCheck, deleteCheck } = useAppSelector(fileState);
+
+  const [message, setMessage] = useState<string>("");
 
   const handlerCopyLink = async (url_link: string) => {
     try {
       await navigator.clipboard.writeText(url_link);
-      setOpen(true);
+      dispatch(copyLinkActions(true));
       dispatch(modalActions(false));
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleClose = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-    if (reason === "clickaway") {
-      return;
+  useEffect(() => {
+    if (modalCategory === "renameFile") {
+      setMessage("Файл переименован");
     }
-
-    setOpen(false);
-  };
+    if (modalCategory === "renameComment") {
+      setMessage("Комментарий переименован");
+    }
+  }, [modalCategory]);
 
   return (
     <>
@@ -73,6 +75,7 @@ export const ModalRename = (props: IModalRenameProps) => {
               <Button
                 variant="contained"
                 type={"button"}
+                disabled={!navigator.clipboard}
                 sx={{ margin: "5px 0 20px 0", borderRadius: "25px" }}
                 onClick={() => handlerCopyLink(url_link!)}
               >
@@ -97,14 +100,21 @@ export const ModalRename = (props: IModalRenameProps) => {
           )}
         </div>
       </div>
-      <div>
-        <Snackbar
-          open={open}
-          autoHideDuration={2000}
-          onClose={handleClose}
-          message="Ссылка скопирована"
-        />
-      </div>
+      {copyLinkCheck && (
+        <div>
+          <SnackBarModal action={copyLinkCheck} message="Ссылка скопирована" />
+        </div>
+      )}
+      {renameCheck && (
+        <div>
+          <SnackBarModal action={renameCheck} message={message} />
+        </div>
+      )}
+      {deleteCheck && (
+        <div>
+          <SnackBarModal action={deleteCheck} message="Файл удален" />
+        </div>
+      )}
     </>
   );
 };
