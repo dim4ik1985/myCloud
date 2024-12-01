@@ -98,10 +98,10 @@ export const ListFiles = (props: IListFilesProps) => {
   };
 
   const handlerOpenFileLink = (file_id: number) => {
-    if (!navigator.clipboard) {
-      alert("Clipboard API is not available.");
-      return;
-    }
+    // if (!navigator.clipboard) {
+    //   alert("Clipboard API is not available.");
+    //   return;
+    // }
     setModalCategory("UploadUrl");
     handleDownload(file_id);
   };
